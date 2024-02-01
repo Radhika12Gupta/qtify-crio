@@ -6,7 +6,7 @@ import Carousel from '../Carousel/Carousel'
 import BasicTabs from "../Tabs/Tabs"
 import Box from '@mui/material/Box';
 
-export const Section = ({data,title,type,filteredDataValues=[],value=0,handleChange=null}) => {
+export const Section = ({data,title,type,filteredDataValues=[],value=0,handleChange=null,genres}) => {
     const [carouselToggle,setCarouselToggle]=useState(true)
     const handleToggle=()=>{
         setCarouselToggle(!carouselToggle)
@@ -21,7 +21,7 @@ export const Section = ({data,title,type,filteredDataValues=[],value=0,handleCha
         </h4>
       </div>
       {
-        type==="song"? <BasicTabs value={value} handleChange={handleChange}/>:null
+        type==="song"? <BasicTabs value={value} handleChange={handleChange} Genres={genres}/>:null
       }
       {
         data.length===0?(

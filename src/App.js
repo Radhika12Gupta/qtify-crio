@@ -1,13 +1,15 @@
 import { Navbar } from "./components/Navbar/Navbar";
 import { Hero } from "./components/Hero/Hero"
 import { useEffect, useState } from "react";
-import { fetchSongs, fetchTopAlbums } from "./api/api";
+import { fetchSongs, fetchTopAlbums, fetchNewAlbums,fetchGenres } from "./api/api";
 import { Card } from "./components/Card/Card.jsx"
 import { Section } from "./components/Section/Section";
 import styles from "./App.module.css"
 function App() {
   const [data,setData]=useState([])
   const [songsData,setSongsData]=useState([])
+  const [newAlbumData,setNewAlbumData]=useState([])
+  const [Genres,setGenres]=useState([])
   const [filteredDataValues,setFilteredDataValues]=useState([])
   const [value,setValue]=useState(0)
 
@@ -40,7 +42,9 @@ function App() {
 
   useEffect(()=>{
     generateTopAlbums()
+    generateNewAlbums()
     generateAllSongsData()
+    generateAllGenres()
   },[])
 
 
@@ -55,6 +59,17 @@ function App() {
 }
   }
 
+  const generateNewAlbums=async()=>{
+    try{
+     const data=await fetchNewAlbums()
+     setNewAlbumData(data)
+    }
+      catch(err){
+       console.log("error",err)
+
+}
+}
+
   const generateAllSongsData=async()=>{
     try{
      const data=await fetchSongs()
@@ -67,25 +82,33 @@ function App() {
 }
 }
 
-const filteredData=(val)=>{
-  
+const generateAllGenres=async()=>{
+  try{
+   const data=await fetchGenres()
+   setGenres(data)
+  }
+    catch(err){
+     console.log("error",err)
+
 }
+}
+
+
+
   return (
     <div className="App">
        <Navbar data={data}/>
        <Hero/>
-       {/* {topAlbumsData.map((topAlbum)=>{
-       return <Card data={topAlbum} type="album" key={topAlbum.id}></Card>
-       })} */}
        <div className={styles.sectionWrapper}>
        <Section data={data} title="Top Albums" type="album" filteredDataValues={data}/>
-       <Section data={data} title="New Albums" type="album" filteredDataValues={data}/>
+       <Section data={newAlbumData} title="New Albums" type="album" filteredDataValues={newAlbumData}/>
        <Section data={songsData}
         title="Songs" 
         type="song" 
         filteredDataValues={filteredDataValues}
         value={value}
         handleChange={handleChange}
+        genres={Genres}
        />
        </div>
     </div>
